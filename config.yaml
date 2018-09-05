@@ -1,0 +1,6 @@
+bot_token: 'token', 
+tg_chat_id: 000,
+vk_group_id: -000, 
+vk_last_post_id: 0,
+vk_login: 'your@login.com',
+vk_password: 'password'
