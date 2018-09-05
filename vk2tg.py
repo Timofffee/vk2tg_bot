@@ -26,23 +26,11 @@ class ConfigLoader:
     def save(self):
         with open(self.FILENAME, 'w') as f:
             yaml.dump(self.values, f)
-    
-    # def get(self, key: str):
-    #     return self.values[key]
-    
-    # def set(self, key: str, value: any):
-    #     self.values[key] = value
 
 
 def load_config():
     global CONFIG
     CONFIG = ConfigLoader(CONFIG_FILE)
-
-
-def html_escape(text):
-    '''Simple HTML escaping function'''
-    text = str(text)
-    return html.escape(text)
 
 
 load_config()
@@ -51,24 +39,6 @@ vk_session.auth()
 
 VK = vk_session.get_api()
 BOT = telebot.TeleBot(CONFIG.values['bot_token'])
-
-
-
-# Post format
-
-# ---Simple
-# Text in post 
-#
-# Link: http://test.org
-# 19-02-1998 12:23
-
-# ---Reply
-# Text in post
-# reply -> Reply from
-# Text in reply post
-#
-# Link: http://test.org
-# 19-02-1998 12:23
 
 
 def get_post(post, reply=False):
@@ -86,8 +56,7 @@ def get_post(post, reply=False):
     post_time = time.strftime('%d-%m-%Y %H:%M', time.localtime(post['date']))
     post_link = link_tmp.format(group_id=-int(post['owner_id']), post_id=post['id'])
     return post_tmp.format(owner=post_owner, text=post['text'], reply=post_reply_text, link='[{}]({})'.format(post_time, post_link))
-#     reply_tmp = 'reply -> {from}\n{text}{reply}'
-#     post_tmp = '{from}\n{text}{reply}\n\n{link}\n{date}'
+
 
 def check_posts():
     while True:
@@ -107,7 +76,8 @@ def check_posts():
             BOT.send_message(CONFIG.values['tg_chat_id'], post, parse_mode='Markdown')
         CONFIG.values['vk_last_post_id'] = last_id
         CONFIG.save()
-        time.sleep(10*60)
+        time.sleep(10*60) # 10 min
+
 
 BOT.send_message(CONFIG.values['tg_chat_id'], 'Bot started')
 
